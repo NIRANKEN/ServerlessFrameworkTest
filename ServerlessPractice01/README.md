@@ -3,11 +3,20 @@
 # Localで実行する
 serverless invoke local -f hello --path src/functions/hello/mock.json
 
+# Serverたてて実行する
+serverless offline start
+curl -X POST -d "@./ServerlessPractice01/src/functions/hello/mock.json" http://localhost:3000/dev/hello
+
+# DynamoDBのコンソールを開く
+Serverたてて実行をしてから、ブラウザで下記にアクセスする
+http://localhost:8000/shell
+
 # 参考
 https://note.com/dafujii/n/naf05740a253b
 
 # 追加予定
 https://qiita.com/noralife/items/e36621ddd0e5b8ff4447
+
 ---------------------------------------------------------------------
 
 # Serverless - AWS Node.js Typescript

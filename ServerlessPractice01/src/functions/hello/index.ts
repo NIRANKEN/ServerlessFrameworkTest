@@ -11,6 +11,18 @@ export default {
           schema: {
             'application/json': schema
           }
+        },
+        documentation: {
+          description: 'test function for aws lambda with nodejs & typescript & serverlessV2',
+          requestHeaders: {
+
+          },
+          methodResponses: {
+            statusCode: 200,
+            responseModels: {
+              'application/json': '【ResponseModelName】'
+            }
+          }
         }
       }
     }

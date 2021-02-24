@@ -1,41 +1,31 @@
 import type { ValidatedAPIGatewayProxyEvent } from '../../../libs/apiGateway';
 import schema from '../schema';
 import { main as hello, getHelloMessage } from '../handler';
-// import { getHelloMessage } from '../handler';
+import { Context } from 'aws-lambda';
 
-let testEvent;
-const context = require('aws-lambda-mock-context');
+let testEvent: ValidatedAPIGatewayProxyEvent<typeof schema>;
+let context: Context;
+process.on('unhandledRejection', console.dir);
 
 describe('check handler results', () => {
     beforeEach(() => {
-        testEvent = {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: {
-                name: 'Fredric'
-            }
-        };
+        testEvent = require('../mock.json');
+        context = {} as Context;
     });
 
-    it('check resoponse', async (done) => {
-        const event : ValidatedAPIGatewayProxyEvent<typeof schema> = require('../mock.json');
-        return await hello(event, context(), (err, response) => {
-            try {
-                expect(err).toBeNull();
-                expect(response).not.toBeNull();
-                // このへんはmiddy.js噛ませたときのテスト
-                expect(response).toMatchObject({statusCode: 200});
-                done();
-            } catch (err) {
-                done(err);
-            }
+    // middy.jsで書かれたhandlerのテスト
+    it('check 200 resoponse', async (done) => {
+        await hello(testEvent, context, (error, response) => {
+            expect(error).toBeNull();
+            expect(response).not.toBeNull();
+            expect(response).toMatchObject({statusCode: 200});
+            done();
         });
     });
     
+    // responseのjsonのテスト
     it('check message content', () => {
-        // アプリケーションの方のテスト
-        expect(getHelloMessage(testEvent)).toBe('Hello Fredric, welcome to the exciting Serverless world!');
+        expect(getHelloMessage(testEvent)).toBe('Hello Frederic, welcome to the exciting Serverless world!');
         testEvent.body.name = 'フレドリック';
         expect(getHelloMessage(testEvent)).toBe('Hello フレドリック, welcome to the exciting Serverless world!');
     });

@@ -8,10 +8,9 @@ import schema from './schema';
 
 export const hello: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   console.log('You called hello.')
-  console.log(event)
   return formatJSONResponse({
     message: getHelloMessage(event),
-    // message: `Hello Hoge, welcome to the exciting Serverless world!`,
+    // message: `Hello ${event.body.name}, welcome to the exciting Serverless world!`,
     event,
   });
 }
